@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:mso="urn:schemas-microsoft-com:office:office" xmlns:msdt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OS Places API | Find (Capture and Verification) Example | Leaflet</title>
+    <link rel="stylesheet" href="https://labs.os.uk/public/os-api-branding/v0.2.0/os-api-branding.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css">
+    <style>
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:0; bottom:0; width:100%; }
+    </style>
+  
+<!--[if gte mso 9]><xml>
+<mso:CustomDocumentProperties>
+<mso:Back_x0020_Office msdt:dt="string">29;#Map|5f3c4778-f918-4721-b4fb-f48250cdf57f</mso:Back_x0020_Office>
+<mso:gd4168f1af1b43549eab634c6d3cea96 msdt:dt="string"></mso:gd4168f1af1b43549eab634c6d3cea96>
+<mso:dd1a6c04fc184eb7941c48c156fa3242 msdt:dt="string">Map|5f3c4778-f918-4721-b4fb-f48250cdf57f</mso:dd1a6c04fc184eb7941c48c156fa3242>
+<mso:Hardware msdt:dt="string"></mso:Hardware>
+<mso:Project_x0020_or_x0020_Work_x0020_Area msdt:dt="string">28;#GIS and GeoSpatial|156db032-670c-4702-8511-0bdf69033a34</mso:Project_x0020_or_x0020_Work_x0020_Area>
+<mso:dad768af094f45af9413a4024604b3da msdt:dt="string"></mso:dad768af094f45af9413a4024604b3da>
+<mso:Place_x0020_or_x0020_Area msdt:dt="string"></mso:Place_x0020_or_x0020_Area>
+<mso:o525c545beb44babb91a89c914661813 msdt:dt="string">GIS and GeoSpatial|156db032-670c-4702-8511-0bdf69033a34</mso:o525c545beb44babb91a89c914661813>
+<mso:TaxCatchAll msdt:dt="string">29;#Map|5f3c4778-f918-4721-b4fb-f48250cdf57f;#28;#GIS and GeoSpatial|156db032-670c-4702-8511-0bdf69033a34</mso:TaxCatchAll>
+<mso:f7270944116b48049de75907dcfc66a0 msdt:dt="string"></mso:f7270944116b48049de75907dcfc66a0>
+<mso:Service_x0020_Area msdt:dt="string"></mso:Service_x0020_Area>
+<mso:display_urn_x003a_schemas-microsoft-com_x003a_office_x003a_office_x0023_Creator msdt:dt="string">Paul Shapley</mso:display_urn_x003a_schemas-microsoft-com_x003a_office_x003a_office_x0023_Creator>
+<mso:Creator msdt:dt="string">20</mso:Creator>
+</mso:CustomDocumentProperties>
+</xml><![endif]-->
+</head>
+  <body>
+    <style>
+    /* Control.Geocoder.css overrides */
+    .leaflet-control-geocoder-error {
+        padding-bottom: 5px;
+    }
+    .leaflet-control-geocoder-alternatives {
+        max-height: 300px;
+        overflow: hidden;
+        overflow-y: auto;
+    }
+    .leaflet-control-geocoder-alternatives li {
+        white-space: normal;
+    }
+</style> <div id="map"></div>
+    <script src="https://labs.os.uk/public/os-api-branding/v0.2.0/os-api-branding.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://labs.os.uk/public/assets/lib/Control.Geocoder.js"></script>
+    <script>
+
+    var apiKey = 'oeDha1JVulFkpOA3VZQ7gq7a1UME5r8k';
+    // var apiKey = 'VUqinBBHsGPgqoeGHsKwVS429iAfFhGR';
+
+    var placeServiceUrl = 'https://api.os.uk/search/places/v1',
+        tileServiceUrl = 'https://api.os.uk/maps/raster/v1/zxy';
+
+    // Initialize the map.
+    var mapOptions = {
+        minZoom: 7,
+        maxZoom: 20,
+        center: [ 52.567, -1.485 ],
+        zoom: 8,
+        maxBounds: [
+            [ 49.528423, -10.76418 ],
+            [ 61.331151, 1.9134116 ]
+        ],
+        attributionControl: false
+    };
+
+    var map = L.map('map', mapOptions);
+
+    // Load and display OS Maps API XZY tile layer on the map.
+    var basemap = L.tileLayer('https://api.os.uk/maps/raster/v1/zxy/Outdoor_3857/{z}/{x}/{y}.png?key=VUqinBBHsGPgqoeGHsKwVS429iAfFhGR', {
+       maxZoom: 20
+    }).addTo(map);
+
+    // Add geocoder control to the map.
+    // Further information can be found at https://github.com/OrdnanceSurvey/leaflet-control-geocoder.
+    var control = L.Control.geocoder({
+        geocoder: new L.Control.Geocoder.osPlacesAPI(apiKey, 'find', { dataset: 'DPA,LPI' })
+    })
+    .addTo(map);
+
+</script>
+  </body>
+</html>
